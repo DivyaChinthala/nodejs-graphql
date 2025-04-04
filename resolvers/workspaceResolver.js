@@ -1,8 +1,10 @@
+import { ObjectId } from "mongodb";
+
 const workspaceResolvers = {
   Query: {
     getWorkspaces: async (_, args, { db }) => {
       try {
-        const { type, limit } = args;
+        const { type, limit } = args.params;
         const filters = {};
         if (type) {
           filters["type"] = type;
@@ -21,6 +23,16 @@ const workspaceResolvers = {
         throw new Error("Failed to fetch workspaces");
       }
     },
+    getBoard: async (_, args, { db }) => {
+      try {
+        const { id } = args;
+        console.log(args);
+        return await db.collection("boards").findOne({ _id: new ObjectId(id) });
+      } catch (error) {
+        console.error("Error fetching board:", error);
+        throw new Error("Failed to fetch board");
+      }
+    },
   },
   Workspace: {
     boards: async (parent, _, { db }) => {
@@ -28,6 +40,15 @@ const workspaceResolvers = {
         .collection("boards")
         .find({ workspaceId: parent._id })
         .toArray();
+    },
+  },
+  Mutation: {
+    deleteBoard: async (_, args, { db }) => {
+      const { id } = args;
+      await db.collection("boards").deleteOne({ _id: id });
+      return {
+        message: "Board deleted successfully",
+      };
     },
   },
 };

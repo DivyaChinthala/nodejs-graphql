@@ -31,6 +31,20 @@ export default `#graphql
 
   # The "Query" type lists all available queries clients can execute.
   type Query {
-    getWorkspaces(type: String, limit: Int): WorkspacesResult
+    getWorkspaces(params: workspaceParams): WorkspacesResult,
+    getBoard(id: String): Board
+  }
+
+  input workspaceParams {
+    type: String, 
+    limit: Int
+  }
+
+  type DeleteBoardResult {
+    message: String
+  }
+  
+  type Mutation {
+    deleteBoard(id: String): DeleteBoardResult
   }
 `;
