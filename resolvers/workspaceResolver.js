@@ -1,6 +1,6 @@
 const workspaceResolvers = {
   Query: {
-    workspaces: async (_, args, { db }) => {
+    getWorkspaces: async (_, args, { db }) => {
       try {
         const { type, limit } = args;
         const filters = {};
@@ -12,7 +12,10 @@ const workspaceResolvers = {
           dbQuery = dbQuery.limit(limit);
         }
         const data = await dbQuery.toArray();
-        return data;
+        return {
+          workspaces: data,
+          count: data.length,
+        };
       } catch (error) {
         console.error("Error fetching workspaces:", error);
         throw new Error("Failed to fetch workspaces");

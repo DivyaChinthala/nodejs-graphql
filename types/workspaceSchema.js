@@ -24,8 +24,13 @@ export default `#graphql
     boards: [Board!]
   }
 
+  type WorkspacesResult {
+    workspaces: [Workspace]
+    count: Int
+  }
+
   # The "Query" type lists all available queries clients can execute.
   type Query {
-    workspaces(type: String, limit: Int): [Workspace]
+    getWorkspaces(type: String, limit: Int): WorkspacesResult
   }
 `;
