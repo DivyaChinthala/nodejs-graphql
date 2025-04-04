@@ -8,6 +8,12 @@ export default `#graphql
     role: String
   }
 
+  type Board {
+    _id: String
+    name: String
+    workspaceId: String
+  }
+
   # This "Workspace" type defines the workspace structure.
   type Workspace {
     _id: String,
@@ -15,10 +21,11 @@ export default `#graphql
     organizationId: String,
     type: String,
     users: [User]
+    boards: [Board!]
   }
 
   # The "Query" type lists all available queries clients can execute.
   type Query {
-    workspaces: [Workspace]
+    workspaces(type: String, limit: Int): [Workspace]
   }
 `;
